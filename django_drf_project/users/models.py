@@ -31,3 +31,13 @@ class Lesson(models.Model):
     video_link = models.URLField()
 
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+class Payment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    payment_date = models.DateTimeField()
+    course_or_lesson = models.CharField(max_length=200)
+    payment_amount = models.DecimalField(max_digits=8, decimal_places=2)
+    payment_method = models.CharField(max_length=20, choices=[('cash', 'Cash'), ('transfer', 'Transfer')])
+
+    def __str__(self):
+        return f"Payment by {self.user} on {self.payment_date}"
