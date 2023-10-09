@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Course,User,Lesson
+from .models import Course,User,Lesson,Payment
 
 class CourseSerializer(serializers.ModelSerializer):
     num_lessons = serializers.SerializerMethodField()
@@ -15,3 +15,6 @@ class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = '__all__'
+
+class PaymentSerializer(serializers.ModelSerializer):
+    pass

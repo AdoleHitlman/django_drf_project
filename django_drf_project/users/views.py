@@ -3,7 +3,7 @@ from rest_framework import viewsets
 from rest_framework import generics
 from rest_framework.generics import ListAPIView
 
-from .serializers import CourseSerializer,LessonSerializer
+from .serializers import CourseSerializer,LessonSerializer,PaymentSerializer
 from .models import Course,User,Lesson
 # Create your views here.
 
