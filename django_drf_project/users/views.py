@@ -29,6 +29,8 @@ class CourseViewSet(viewsets.ModelViewSet):
         new_course = serializer.save()
         new_course.owner = self.request.user
         new_course.save()
+    def perform_update(self, serializer):
+        cource = serializer.update
 
 class LessonListCreateView(generics.ListCreateAPIView):
     queryset = Lesson.objects.all()
@@ -38,12 +40,10 @@ class LessonListCreateView(generics.ListCreateAPIView):
         new_lesson = serializer.save()
         new_lesson.owner = self.request.user
         new_lesson.save()
+    def perform_update(self, serializer):
+        lesson = serializer.update
 
 
-class LessonRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Lesson.objects.all()
-    serializer_class = LessonSerializer
-    permission_classes = [IsOwnerOrStaff]
 
 
 class PaymentListView(ListAPIView):
