@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'users',
     'lesson_manage',
     'drf_yasg',
-    'docs'
+    'docs',
+    'django_celery_beat',
 ]
 STRIPE_SECRET_KEY = 'sk_test_51O6ceUB2dCD6eXWlaM9fnoaGgjjfCRGIDqvvARQTtoYEcXm8HVHF0MZUPkqVTUqpMeHToUsPvyBweuZFCkuRRggr00XkVthB52'
 REST_FRAMEWORK = {
@@ -139,3 +140,20 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
+
+CELERY_BROKER_URL = 'redis://localhost:6379'  # URL-адрес брокера сообщений (например, RabbitMQ)
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'  # URL-адрес бекенда результатов (например, Redis)
+CELERY_TIMEZONE = "Australia/Tasmania"
+
+# Флаг отслеживания выполнения задач
+CELERY_TASK_TRACK_STARTED = True
+
+# Максимальное время на выполнение задачи
+CELERY_TASK_TIME_LIMIT = 30 * 60
+# Настройка Celery Beat
+CELERY_BEAT_SCHEDULE = {
+    'block_inactive_users_task': {
+        'task': 'block_inactive_users',
+        'schedule': timedelta(days=1),
+    },
+}
