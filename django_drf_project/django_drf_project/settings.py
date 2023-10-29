@@ -39,8 +39,10 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'users',
     'lesson_manage',
+    'drf_yasg',
+    'docs'
 ]
-
+STRIPE_SECRET_KEY = 'sk_test_51O6ceUB2dCD6eXWlaM9fnoaGgjjfCRGIDqvvARQTtoYEcXm8HVHF0MZUPkqVTUqpMeHToUsPvyBweuZFCkuRRggr00XkVthB52'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',

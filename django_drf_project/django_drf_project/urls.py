@@ -18,6 +18,9 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+    path('', include('docs.urls')),
+    path('', include('lesson_manage.urls')),
+    path('', include('users.urls')),
     path('admin/', admin.site.urls),
-    path('users/', include('users.urls', namespace='users')),
+
 ]
