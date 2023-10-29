@@ -4,7 +4,7 @@ from .validators import DescriptionValidator
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    num_lessons = serializers.SerializerMethodField()
+    num_lessons = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Course
@@ -12,7 +12,7 @@ class CourseSerializer(serializers.ModelSerializer):
         validators = [DescriptionValidator(field='description')]
 
     def get_num_lessons(self, instance):
-        return instance.lessons.count()
+        return instance.lesson_set.count()
 
 
 class LessonSerializer(serializers.ModelSerializer):

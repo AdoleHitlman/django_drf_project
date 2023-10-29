@@ -1,7 +1,8 @@
+from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, get_object_or_404, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 
 from .models import Course, Lesson, Subscription
@@ -56,6 +57,10 @@ class LessonListView(generics.ListCreateAPIView):
     def perform_update(self, serializer):
         lesson = serializer.save()
 
+class LessonDetailView(RetrieveUpdateDestroyAPIView):
+    queryset = Lesson.objects.all()
+    serializer_class = LessonSerializer
+    permission_classes = [IsOwnerOrStaff]
 
 class PaymentListView(ListAPIView):
     serializer_class = PaymentSerializer

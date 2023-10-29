@@ -1,17 +1,22 @@
+
 from rest_framework.permissions import BasePermission
 
 
 class IsOwnerOrStaff(BasePermission):
     def has_permission(self, request, view):
-        if request.user.is_staff:
+        if view.action in ['list', 'create']:
+            # Возвращаем True для списка и создания записей
             return True
-        elif view.action == "update" or view.action == "partial_update":  # Обработка обновления только одного поля
-            return request.user.groups.filter(name='Moderators').exists()
+        elif view.action in ['update', 'partial_update']:
+            # Возвращаем True только для владельцев и модераторов для обновления записей
+            return request.user.is_authenticated and (request.user.is_staff or
+                   request.user.groups.filter(name='Moderators').exists())
         return False
 
     def has_object_permission(self, request, view, obj):
-        if request.user.is_staff:
-            return True
-        elif view.action == "update" or view.action == "partial_update":
-            return request.user.groups.filter(name='Moderators').exists()
-        return request.user == obj.owner
+        if view.action in ['retrieve', 'update', 'partial_update', 'destroy']:
+            # Возвращаем True только для владельцев и модераторов для просмотра, обновления и удаления записей
+            return request.user.is_authenticated and (request.user.is_staff or
+                   request.user.groups.filter(name='Moderators').exists() or
+                   obj.owner == request.user)
+        return False
