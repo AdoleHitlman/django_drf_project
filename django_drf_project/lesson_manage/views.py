@@ -4,6 +4,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView, get_object_or_404, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import Course, Lesson, Subscription
 from .paginators import CoursePaginator, LessonPaginator
@@ -12,31 +13,41 @@ from .serializers import CourseSerializer, LessonSerializer, PaymentSerializer
 
 
 # Create your views here.
+class SubscriptionView(APIView):
+    def post(self, request):
+        user = request.user
+        course_id = request.data.get('course')
+
+        if course_id:
+            try:
+                course = Course.objects.get(pk=course_id)
+                subscription, created = Subscription.objects.get_or_create(user=user, course=course)
+                subscription.subscribed = True
+                subscription.save()
+                return Response(status=status.HTTP_200_OK)
+            except Course.DoesNotExist:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request):
+        user = request.user
+        course_id = request.data.get('course')
+
+        if course_id:
+            try:
+                course = Course.objects.get(pk=course_id)
+                Subscription.objects.filter(user=user, course=course).delete()
+                return Response(status=status.HTTP_200_OK)
+            except Course.DoesNotExist:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     permission_classes = [IsOwnerOrStaff]
     pagination_class = CoursePaginator
-
-    @action(detail=True, methods=['post'])
-    def subscribe(self, request, pk=None):
-        course = self.get_object()
-        user = request.user
-
-        subscription, created = Subscription.objects.get_or_create(user=user, course=course)
-        subscription.subscribed = True
-        subscription.save()
-
-        return Response(status=status.HTTP_200_OK)
-
-    @action(detail=True, methods=['post'])
-    def unsubscribe(self, request, pk=None):
-        course = self.get_object()
-        user = request.user
-
-        Subscription.objects.filter(user=user, course=course).delete()
-
-        return Response(status=status.HTTP_200_OK)
 
     def perform_create(self, serializer):
         new_course = serializer.save(owner=self.request.user)
