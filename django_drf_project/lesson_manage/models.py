@@ -1,5 +1,5 @@
 from django.db import models
-from django_drf_project import settings
+from config import settings
 from users.models import User
 # Create your models here.
 class Course(models.Model):
