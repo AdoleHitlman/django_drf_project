@@ -156,4 +156,8 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'block_inactive_users',
         'schedule': timedelta(days=1),
     },
+    'send_updates':{
+        'task':'send_updates',
+        'schedule': timedelta(minutes=10),
+    },
 }

@@ -51,14 +51,12 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         new_course = serializer.save(owner=self.request.user)
-        # Создание платежа и получение платежного интента
         payment_intent = create_payment_intent(new_course)
         new_course.payment_intent_id = payment_intent.id
         new_course.save()
 
     def perform_update(self, serializer):
         course = serializer.save()
-        # Изменение платежного интента
         updated_payment_intent = retrieve_payment_intent(course.payment_intent_id)
         updated_payment_intent.amount = course.price * 100
         updated_payment_intent.save()
@@ -72,14 +70,12 @@ class LessonViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         new_lesson = serializer.save(owner=self.request.user)
-        # Создание платежа и получение платежного интента
         payment_intent = create_payment_intent(new_lesson)
         new_lesson.payment_intent_id = payment_intent['id']
         new_lesson.save()
 
     def perform_update(self, serializer):
         lesson = serializer.save()
-        # Изменение платежного интента
         updated_payment_intent = retrieve_payment_intent(lesson.payment_intent_id)
         updated_payment_intent['amount'] = lesson.price * 100
         updated_payment_intent.save()

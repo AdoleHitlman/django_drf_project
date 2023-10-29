@@ -21,3 +21,7 @@ def block_inactive_users():
             user.save()
 
     return 'Background task completed successfully!'
+
+@shared_task
+def send_updates():
+    pass
