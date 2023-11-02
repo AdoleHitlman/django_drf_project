@@ -1,5 +1,4 @@
 from rest_framework import generics, status
-from rest_framework import generics, status
 from rest_framework import viewsets
 from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
@@ -51,7 +50,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         new_course = serializer.save(owner=self.request.user)
-        payment_intent = create_payment_intent(new_course)
+        payment_intent = create_payment_intent(amount=new_course,currency='rub')
         new_course.payment_intent_id = payment_intent.id
         new_course.save()
 
@@ -70,7 +69,7 @@ class LessonViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         new_lesson = serializer.save(owner=self.request.user)
-        payment_intent = create_payment_intent(new_lesson)
+        payment_intent = create_payment_intent(amount=new_lesson,currency='rub')
         new_lesson.payment_intent_id = payment_intent['id']
         new_lesson.save()
 
