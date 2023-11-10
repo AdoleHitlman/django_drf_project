@@ -50,7 +50,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         new_course = serializer.save(owner=self.request.user)
-        payment_intent = create_payment_intent(amount=new_course,currency='rub')
+        payment_intent = create_payment_intent(amount=new_course.price * 100, currency='rub')
         new_course.payment_intent_id = payment_intent.id
         new_course.save()
 
@@ -69,7 +69,7 @@ class LessonViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         new_lesson = serializer.save(owner=self.request.user)
-        payment_intent = create_payment_intent(amount=new_lesson,currency='rub')
+        payment_intent = create_payment_intent(amount=new_lesson.price * 100, currency='rub')
         new_lesson.payment_intent_id = payment_intent['id']
         new_lesson.save()
 

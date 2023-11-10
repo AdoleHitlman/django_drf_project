@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'docs',
     'django_celery_beat',
+
+
 ]
 STRIPE_SECRET_KEY = 'sk_test_51O6ceUB2dCD6eXWlaM9fnoaGgjjfCRGIDqvvARQTtoYEcXm8HVHF0MZUPkqVTUqpMeHToUsPvyBweuZFCkuRRggr00XkVthB52'
 REST_FRAMEWORK = {
@@ -156,8 +158,8 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'block_inactive_users',
         'schedule': timedelta(days=1),
     },
-    'send_updates':{
-        'task':'send_updates',
+    'send_update_emails': {
+        'task': 'send_updates',
         'schedule': timedelta(minutes=10),
     },
 }
